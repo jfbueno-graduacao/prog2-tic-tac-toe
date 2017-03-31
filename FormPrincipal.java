@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
@@ -47,6 +49,33 @@ public class FormPrincipal extends JFrame {
         criarPainelHeader();
         criarPainelCentro();
         criarPainelFooter();
+        criarTabuleiro();
+    }
+
+    private void criarTabuleiro(){
+        for (int i = 0; i < 9; i++) {
+            JLabel label = new JLabel();
+            label.setFont(new Font("Verdana", 0, 40));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            
+            int leftBorder = (i % 3 == 0) ? 0 : 2;
+            int topBorder = (i < 3) ? 0 : 2;
+            int rightBorder = (i == 2 || i == 5 || i == 8) ? 0 : 2;
+            int bottomBorder = (i > 5) ? 0 : 2;
+            
+            Border border = BorderFactory.createMatteBorder(topBorder, leftBorder, bottomBorder, rightBorder, Color.BLACK);
+            
+            label.setBorder(border);
+            
+            label.addMouseListener(new MouseAdapter() {  
+                public void mouseClicked(MouseEvent e) {  
+                   JLabel label = (JLabel) e.getSource();
+                   label.setText("X");
+                }  
+            });
+            
+            painelCentro.add(label);
+        }
     }
 
     private void criarPainelFooter() {
@@ -61,17 +90,6 @@ public class FormPrincipal extends JFrame {
         painelCentro = new JPanel(new GridLayout(3, 3));
 
         add(painelCentro, BorderLayout.CENTER);
-
-        /* Para testes de layout apenas */
-
-        for (int i = 0; i < 9; i++) {
-            JLabel label = new JLabel(i % 2 == 0 ? "X" : "O");
-            label.setFont(new Font("Verdana", 0, 40));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            Border border = BorderFactory.createMatteBorder(2, 2, 0, 0, Color.BLACK);
-            label.setBorder(border);
-            painelCentro.add(label);
-        }
     }
 
     private void criarPainelHeader() {
@@ -83,6 +101,7 @@ public class FormPrincipal extends JFrame {
     }
 
     private void initForm() {
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500, 720));
         pack();
