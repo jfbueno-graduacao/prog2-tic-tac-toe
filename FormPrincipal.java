@@ -16,7 +16,7 @@ import java.awt.Font;
 public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;
 
-	public FormPrincipal(){
+    public FormPrincipal(){
         super();
         initForm();
         initComponents();
