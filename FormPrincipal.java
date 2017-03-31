@@ -37,7 +37,7 @@ public class FormPrincipal extends JFrame {
 				System.exit(0);
 			}
 		});
-		menuOperacoes.add(menuItemSair);
+		menuOperacoes.add(menuItemSair);  
 		barraMenuPrincipal.add(menuOperacoes);
 		setJMenuBar(barraMenuPrincipal);
 
