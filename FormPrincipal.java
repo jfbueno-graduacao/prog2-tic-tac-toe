@@ -20,14 +20,37 @@ import java.awt.Color;
 import javax.swing.border.Border;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.JOptionPane;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;
+    private int[][] tabuleiro = new int[3][3];
+    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();
+
+    //Apenas para testes
+    private boolean jogador = false;
 
     public FormPrincipal() {
         super();
         initForm();
         initComponents();
+    }
+
+    private Map<String, int[]> criarMapeamento(){
+        Map<String, int[]> map = new HashMap<>();
+        map.put("0", new int[] {0, 0});
+        map.put("1", new int[] {0, 1});
+        map.put("2", new int[] {0, 2});
+        map.put("3", new int[] {1, 0});
+        map.put("4", new int[] {1, 1});
+        map.put("5", new int[] {1, 2});
+        map.put("6", new int[] {2, 0});
+        map.put("7", new int[] {2, 1});
+        map.put("8", new int[] {2, 2});
+        return map;
     }
 
     private void initComponents() {
@@ -64,13 +87,19 @@ public class FormPrincipal extends JFrame {
             int bottomBorder = (i > 5) ? 0 : 2;
             
             Border border = BorderFactory.createMatteBorder(topBorder, leftBorder, bottomBorder, rightBorder, Color.BLACK);
-            
             label.setBorder(border);
+            label.setName(String.valueOf(i));
             
             label.addMouseListener(new MouseAdapter() {  
                 public void mouseClicked(MouseEvent e) {  
                    JLabel label = (JLabel) e.getSource();
-                   label.setText("X");
+                   int[] coordenadas = mapamentoTabuleiro.get(label.getName());
+
+                   // Validar o valor a ser colocado - vai depender de quem for o jogador
+                   tabuleiro[coordenadas[0]][coordenadas[1]] = jogador ? 3 : 5;
+                   label.setText(jogador ? "O" : "X");
+
+                   jogador = !jogador;
                 }  
             });
             
