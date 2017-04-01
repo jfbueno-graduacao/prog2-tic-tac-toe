@@ -1,7 +1,7 @@
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
+import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 
 import java.awt.Dimension;
@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -139,13 +140,26 @@ public class FormPrincipal extends JFrame {
     }
 
     private void criarPainelHeader() {
-        painelHeader = new JPanel(new FlowLayout());
-        painelHeader.setPreferredSize(new Dimension(0, 100));
+        painelHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        painelHeader.setPreferredSize(new Dimension(0, 60));
         painelHeader.setBackground(Color.cyan);
 
-        painelHeader.add(new JButton("teste 1"));
-        painelHeader.add(new JButton("teste 1"));
-        painelHeader.add(new JButton("teste 1"));
+        lbUsuario1 = new JLabel("Jogador 1:");
+        painelHeader.add(lbUsuario1);
+
+        txtUsuario1 = new JTextField();
+        txtUsuario1.setPreferredSize(new Dimension(120, 22));
+        painelHeader.add(txtUsuario1);
+       
+        lbUsuario2 = new JLabel("Jogador 2:");
+        painelHeader.add(lbUsuario2);
+
+        txtUsuario2 = new JTextField();
+        txtUsuario2.setPreferredSize(new Dimension(120, 22));
+        painelHeader.add(txtUsuario2);
+
+        btDefUsuarios = new JButton("Pronto");
+        painelHeader.add(btDefUsuarios);
 
         add(painelHeader, BorderLayout.PAGE_START);
     }
@@ -162,4 +176,7 @@ public class FormPrincipal extends JFrame {
     JMenuBar barraMenuPrincipal;
     JMenu menuOperacoes;
     JMenuItem menuItemSair;
+    JLabel lbUsuario1, lbUsuario2;
+    JTextField txtUsuario1, txtUsuario2;
+    JButton btDefUsuarios;
 }
