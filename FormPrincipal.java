@@ -134,7 +134,17 @@ public class FormPrincipal extends JFrame {
             painelCentro.add(label);
         }
     }
-
+    private void verificaGanhador(){
+    	if((tabuleiro[0][0]+tabuleiro[0][1]+tabuleiro[0][2])==15){// testando X
+        	JOptionPane.showMessageDialog(null,"Fim da Partida");
+        }
+        /*else if((tabuleiro[0][1]+tabuleiro[1][1]+tabuleiro[1][2])==15){// testando X
+        	JOptionPane.showMessageDialog(null,"Fim da Partida");
+        }
+        else if((tabuleiro[0][2]+tabuleiro[2][1]+tabuleiro[2][2])==15){// testando X
+        	JOptionPane.showMessageDialog(null,"Fim da Partida");
+        }*/
+    }
     private void criarPainelFooter() {
         painelFooter = new JPanel();
         painelFooter.setPreferredSize(new Dimension(0, 100));
