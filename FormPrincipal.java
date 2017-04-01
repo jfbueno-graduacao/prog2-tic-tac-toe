@@ -148,14 +148,14 @@ public class FormPrincipal extends JFrame {
         painelHeader.add(lbUsuario1);
 
         txtUsuario1 = new JTextField();
-        txtUsuario1.setPreferredSize(new Dimension(120, 22));
+        txtUsuario1.setPreferredSize(new Dimension(110, 22));
         painelHeader.add(txtUsuario1);
        
         lbUsuario2 = new JLabel("Jogador 2:");
         painelHeader.add(lbUsuario2);
 
         txtUsuario2 = new JTextField();
-        txtUsuario2.setPreferredSize(new Dimension(120, 22));
+        txtUsuario2.setPreferredSize(new Dimension(110, 22));
         painelHeader.add(txtUsuario2);
 
         btDefUsuarios = new JButton("Pronto");
