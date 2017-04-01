@@ -52,6 +52,7 @@ public class FormPrincipal extends JFrame {
         super();
         initForm();
         initComponents();
+        setTitle("Jogo da Velha");
     }
 
     private Map<String, int[]> criarMapeamento(){
@@ -70,15 +71,25 @@ public class FormPrincipal extends JFrame {
 
     private void initComponents() {
         barraMenuPrincipal = new JMenuBar();
-        menuOperacoes = new JMenu("Operações");
-        menuItemSair = new JMenuItem("Sair");
+        
+        menuOperacoes = new JMenu("Operações");// menu externo
+        JMenu menuHelp = new JMenu("Ajuda");
+        menuHelp.addActionListener(new ActionListener(){
+    		public void actionPerformed(ActionEvent e){
+    			//ação pro menu Ajuda
+    		}
+        });
+        menuItemSair = new JMenuItem("Sair");// menu interno
         menuItemSair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                if(JOptionPane.showConfirmDialog(null,"Deseja Realmente sair? ")==0){
+            		System.exit(0);// ação para sair
+                }
             }
         });
-        menuOperacoes.add(menuItemSair);
+        menuOperacoes.add(menuItemSair);// add os items no menu
         barraMenuPrincipal.add(menuOperacoes);
+        barraMenuPrincipal.add(menuHelp);
         setJMenuBar(barraMenuPrincipal);
 
         BorderLayout borderLayout = new BorderLayout(0, 10);
@@ -120,7 +131,6 @@ public class FormPrincipal extends JFrame {
                    jogador = !jogador;
                 }  
             });
-            
             painelCentro.add(label);
         }
     }
@@ -128,7 +138,7 @@ public class FormPrincipal extends JFrame {
     private void criarPainelFooter() {
         painelFooter = new JPanel();
         painelFooter.setPreferredSize(new Dimension(0, 100));
-        painelFooter.setBackground(Color.cyan);
+        painelFooter.setBackground(Color.GRAY);
 
         add(painelFooter, BorderLayout.PAGE_END);
     }
@@ -142,7 +152,7 @@ public class FormPrincipal extends JFrame {
     private void criarPainelHeader() {
         painelHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         painelHeader.setPreferredSize(new Dimension(0, 60));
-        painelHeader.setBackground(Color.cyan);
+        painelHeader.setBackground(Color.GRAY);
 
         lbUsuario1 = new JLabel("Jogador 1:");
         painelHeader.add(lbUsuario1);
@@ -180,3 +190,5 @@ public class FormPrincipal extends JFrame {
     JTextField txtUsuario1, txtUsuario2;
     JButton btDefUsuarios;
 }
+
+
