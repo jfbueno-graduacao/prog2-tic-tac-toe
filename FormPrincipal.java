@@ -30,7 +30,7 @@ public class FormPrincipal extends JFrame {
     private int[][] tabuleiro = new int[3][3];
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();
 
-    //Apenas para testes
+    //Apenas para teste
     private boolean jogador = false;
 
     public FormPrincipal() {
@@ -89,7 +89,7 @@ public class FormPrincipal extends JFrame {
             Border border = BorderFactory.createMatteBorder(topBorder, leftBorder, bottomBorder, rightBorder, Color.BLACK);
             label.setBorder(border);
             label.setName(String.valueOf(i));
-            
+
             label.addMouseListener(new MouseAdapter() {  
                 public void mouseClicked(MouseEvent e) {  
                    JLabel label = (JLabel) e.getSource();
