@@ -1,3 +1,18 @@
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.FlowLayout;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Color;
+
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -5,21 +20,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
-
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
 import javax.swing.border.Border;
-import java.awt.Font;
-import java.awt.GridBagLayout;
 import javax.swing.JOptionPane;
 
 import java.util.HashMap;
@@ -32,6 +35,17 @@ public class FormPrincipal extends JFrame {
 
     //Apenas para teste
     private boolean jogador = false;
+
+    //Apenas para teste
+    private void printTabuleiro(){
+        for(int l = 0; l < tabuleiro.length; l++){
+            for(int c = 0; c < tabuleiro[l].length; c++){
+                System.out.print(tabuleiro[l][c] + "   ");
+            }
+
+            System.out.print("\n");
+        }
+    }
 
     public FormPrincipal() {
         super();
@@ -97,6 +111,9 @@ public class FormPrincipal extends JFrame {
 
                    // Validar o valor a ser colocado - vai depender de quem for o jogador
                    tabuleiro[coordenadas[0]][coordenadas[1]] = jogador ? 3 : 5;
+
+                   //Apenas para testes
+                   printTabuleiro();
                    label.setText(jogador ? "O" : "X");
 
                    jogador = !jogador;
@@ -122,9 +139,13 @@ public class FormPrincipal extends JFrame {
     }
 
     private void criarPainelHeader() {
-        painelHeader = new JPanel(new GridBagLayout());
+        painelHeader = new JPanel(new FlowLayout());
         painelHeader.setPreferredSize(new Dimension(0, 100));
         painelHeader.setBackground(Color.cyan);
+
+        painelHeader.add(new JButton("teste 1"));
+        painelHeader.add(new JButton("teste 1"));
+        painelHeader.add(new JButton("teste 1"));
 
         add(painelHeader, BorderLayout.PAGE_START);
     }
