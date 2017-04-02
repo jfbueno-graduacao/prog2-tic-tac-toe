@@ -33,6 +33,7 @@ public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;
     private int[][] tabuleiro = new int[3][3];
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();
+    private IJogador[] jogadores;
 
     //Apenas para teste
     private boolean jogador = false;
@@ -55,6 +56,15 @@ public class FormPrincipal extends JFrame {
         setTitle("Jogo da Velha");
     }
 
+    private void inicializarJogadores(){
+        // todo: Validar se os dois campos de texto foram preenchidos 
+
+        jogadores = new IJogador[2];
+
+        jogadores[0] = new JogadorX(txtUsuario1.getText());
+        jogadores[1] = new JogadorO(txtUsuario2.getText());
+    }
+
     private Map<String, int[]> criarMapeamento(){
         Map<String, int[]> map = new HashMap<>();
         map.put("0", new int[] {0, 0});
@@ -72,7 +82,7 @@ public class FormPrincipal extends JFrame {
     private void initComponents() {
         barraMenuPrincipal = new JMenuBar();
         
-        menuOperacoes = new JMenu("Operações");// menu externo
+        menuOperacoes = new JMenu("Operacoes");// menu externo
         JMenu menuHelp = new JMenu("Ajuda");
         menuHelp.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
@@ -87,6 +97,7 @@ public class FormPrincipal extends JFrame {
                 }
             }
         });
+
         menuOperacoes.add(menuItemSair);// add os items no menu
         barraMenuPrincipal.add(menuOperacoes);
         barraMenuPrincipal.add(menuHelp);
@@ -134,17 +145,15 @@ public class FormPrincipal extends JFrame {
             painelCentro.add(label);
         }
     }
+
     private void verificaGanhador(){
-    	if((tabuleiro[0][0]+tabuleiro[0][1]+tabuleiro[0][2])==15){// testando X
-        	JOptionPane.showMessageDialog(null,"Fim da Partida");
+    	for(int linha = 0; linha < tabuleiro.length; linha++){
+            for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
+
+            }
         }
-        /*else if((tabuleiro[0][1]+tabuleiro[1][1]+tabuleiro[1][2])==15){// testando X
-        	JOptionPane.showMessageDialog(null,"Fim da Partida");
-        }
-        else if((tabuleiro[0][2]+tabuleiro[2][1]+tabuleiro[2][2])==15){// testando X
-        	JOptionPane.showMessageDialog(null,"Fim da Partida");
-        }*/
     }
+
     private void criarPainelFooter() {
         painelFooter = new JPanel();
         painelFooter.setPreferredSize(new Dimension(0, 100));
@@ -180,6 +189,15 @@ public class FormPrincipal extends JFrame {
 
         btDefUsuarios = new JButton("Pronto");
         painelHeader.add(btDefUsuarios);
+
+        btDefUsuarios.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae){
+                inicializarJogadores();
+                btDefUsuarios.setEnabled(false);
+                txtUsuario1.setEnabled(false);
+                txtUsuario2.setEnabled(false);
+            }
+        });
 
         add(painelHeader, BorderLayout.PAGE_START);
     }
