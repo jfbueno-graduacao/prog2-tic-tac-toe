@@ -55,16 +55,21 @@ public class FormPrincipal extends JFrame {
     }
 
     private void inicializarJogadores(){
-        // todo: Validar se os dois campos de texto foram preenchidos 
-
         jogadores = new IJogador[2];
 
         jogadores[0] = new JogadorX(txtUsuario1.getText());
-        jogadores[1] = new JogadorO(txtUsuario2.getText());
+        jogadores[1] = new JogadorO(txtUsuario2.getText());   
+
+        mostrarJogadorAtual();    
     }
 
     private void trocarJogadorAtual(){
-        indexJogadorAtual = indexJogadorAtual == 0 ? 1 : 0;        
+        indexJogadorAtual = indexJogadorAtual == 0 ? 1 : 0;
+        mostrarJogadorAtual();
+    }
+
+    private void mostrarJogadorAtual(){
+        lbJogadorAtual.setText(String.format("Vez de %s", ((Jogador)jogadores[indexJogadorAtual]).getNome()));
     }
 
     private Map<String, int[]> criarMapeamento(){
@@ -84,7 +89,7 @@ public class FormPrincipal extends JFrame {
     private void initComponents() {
         barraMenuPrincipal = new JMenuBar();
         
-        menuOperacoes = new JMenu("Operacoes");// menu externo
+        menuOperacoes = new JMenu("Operações");// menu externo
         JMenu menuHelp = new JMenu("Ajuda");
         menuHelp.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
@@ -94,7 +99,7 @@ public class FormPrincipal extends JFrame {
         menuItemSair = new JMenuItem("Sair");// menu interno
         menuItemSair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(JOptionPane.showConfirmDialog(null,"Deseja Realmente sair? ")==0){
+                if(JOptionPane.showConfirmDialog(null, "Deseja Realmente sair? ") == 0){
             		System.exit(0);// ação para sair
                 }
             }
@@ -136,14 +141,15 @@ public class FormPrincipal extends JFrame {
                    JLabel label = (JLabel) e.getSource();
                    int[] coordenadas = mapamentoTabuleiro.get(label.getName());
 
-                   // Validar o valor a ser colocado - vai depender de quem for o jogador
                    tabuleiro[coordenadas[0]][coordenadas[1]] = jogadores[indexJogadorAtual].getMultiplicador();
                    label.setText(jogadores[indexJogadorAtual].getSimbolo());
                    trocarJogadorAtual();
                    label.removeMouseListener(this);
 
-                   //Apenas para testes
+                   // todo: Remover (Apenas para testes)
                    printTabuleiro();
+
+                   verificaGanhador();
                 }  
             });
             painelCentro.add(label);
@@ -151,9 +157,28 @@ public class FormPrincipal extends JFrame {
     }
 
     private void verificaGanhador(){
-    	for(int linha = 0; linha < tabuleiro.length; linha++){
-            for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
+        int[] somasColunas = {0, 0, 0};
+        int[] somasDiagonais = {0, 0}; // 0 é a principal, 1 é a secundária
 
+    	for(int linha = 0; linha < tabuleiro.length; linha++){
+            int somaLinha = 0;
+            for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
+                somaLinha += tabuleiro[linha][coluna];
+                somasColunas[coluna] += tabuleiro[linha][coluna];
+
+                if(linha == coluna){ // Diagonal principal
+                    somasDiagonais[0] += tabuleiro[linha][coluna];
+                }else if(linha + coluna == tabuleiro.length){
+                    somasDiagonais[1] += tabuleiro[linha][coluna];
+                }
+
+                if( somaLinha == 9 || somaLinha == 25 || 
+                    somasColunas[coluna] == 9 || somasColunas[coluna] == 25 ||
+                    somasDiagonais[0] == 9 || somasDiagonais[0] == 25 ||
+                    somasDiagonais[1] == 9 || somasDiagonais[1] == 25)
+                {
+                    JOptionPane.showMessageDialog(null, "Temos um vencedor", "", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         }
     }
@@ -173,8 +198,8 @@ public class FormPrincipal extends JFrame {
     }
 
     private void criarPainelHeader() {
-        painelHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        painelHeader.setPreferredSize(new Dimension(0, 60));
+        painelHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 15));
+        painelHeader.setPreferredSize(new Dimension(0, 100));
         painelHeader.setBackground(new Color(219, 219, 219));
 
         lbUsuario1 = new JLabel("Jogador 1:");
@@ -194,8 +219,18 @@ public class FormPrincipal extends JFrame {
         btDefUsuarios = new JButton("Pronto");
         painelHeader.add(btDefUsuarios);
 
+        lbJogadorAtual = new JLabel("");
+        lbJogadorAtual.setFont(new Font("Verdana", 0, 20));
+        lbJogadorAtual.setHorizontalAlignment(SwingConstants.CENTER);
+        painelHeader.add(lbJogadorAtual);
+
         btDefUsuarios.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae){
+                if(txtUsuario1.getText().trim().isEmpty() || txtUsuario2.getText().trim().isEmpty()){
+                   JOptionPane.showMessageDialog(null, "Preencha corretamente os nomes dos jogadores", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
                 inicializarJogadores();
                 btDefUsuarios.setEnabled(false);
                 txtUsuario1.setEnabled(false);
@@ -218,7 +253,7 @@ public class FormPrincipal extends JFrame {
     JMenuBar barraMenuPrincipal;
     JMenu menuOperacoes;
     JMenuItem menuItemSair;
-    JLabel lbUsuario1, lbUsuario2;
+    JLabel lbUsuario1, lbUsuario2, lbJogadorAtual;
     JTextField txtUsuario1, txtUsuario2;
     JButton btDefUsuarios;
 }
