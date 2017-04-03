@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
+import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -52,6 +53,22 @@ public class FormPrincipal extends JFrame {
         initForm();
         initComponents();
         setTitle("Jogo da Velha");
+        bloquearTabuleiro();
+    }
+
+    private void bloquearTabuleiro(){
+        trocarEstadoTabuleiro(true);
+    }
+
+    private void desbloquearTabuleiro(){
+        trocarEstadoTabuleiro(false);
+    }
+
+    private void trocarEstadoTabuleiro(boolean bloquear){
+        for(Component control : painelCentro.getComponents()){
+            JLabel lb = (JLabel)control;
+            lb.setEnabled(!bloquear);
+        }
     }
 
     private void inicializarJogadores(){
@@ -138,18 +155,23 @@ public class FormPrincipal extends JFrame {
 
             label.addMouseListener(new MouseAdapter() {  
                 public void mouseClicked(MouseEvent e) {  
-                   JLabel label = (JLabel) e.getSource();
-                   int[] coordenadas = mapamentoTabuleiro.get(label.getName());
+                    JLabel label = (JLabel) e.getSource();
 
-                   tabuleiro[coordenadas[0]][coordenadas[1]] = jogadores[indexJogadorAtual].getMultiplicador();
-                   label.setText(jogadores[indexJogadorAtual].getSimbolo());
-                   trocarJogadorAtual();
-                   label.removeMouseListener(this);
+                    if(!label.isEnabled()){
+                        return;
+                    }
 
-                   // todo: Remover (Apenas para testes)
-                   printTabuleiro();
+                    int[] coordenadas = mapamentoTabuleiro.get(label.getName());
 
-                   verificaGanhador();
+                    tabuleiro[coordenadas[0]][coordenadas[1]] = jogadores[indexJogadorAtual].getMultiplicador();
+                    label.setText(jogadores[indexJogadorAtual].getSimbolo());
+                    trocarJogadorAtual();
+                    label.removeMouseListener(this);
+
+                    // todo: Remover (Apenas para testes)
+                    printTabuleiro();
+
+                    verificaGanhador();
                 }  
             });
             painelCentro.add(label);
@@ -257,5 +279,3 @@ public class FormPrincipal extends JFrame {
     JTextField txtUsuario1, txtUsuario2;
     JButton btDefUsuarios;
 }
-
-
