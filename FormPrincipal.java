@@ -34,9 +34,7 @@ public class FormPrincipal extends JFrame {
     private int[][] tabuleiro = new int[3][3];
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();
     private IJogador[] jogadores;
-
-    //Apenas para teste
-    private boolean jogador = false;
+    private int indexJogadorAtual = 0;
 
     //Apenas para teste
     private void printTabuleiro(){
@@ -63,6 +61,10 @@ public class FormPrincipal extends JFrame {
 
         jogadores[0] = new JogadorX(txtUsuario1.getText());
         jogadores[1] = new JogadorO(txtUsuario2.getText());
+    }
+
+    private void trocarJogadorAtual(){
+        indexJogadorAtual = indexJogadorAtual == 0 ? 1 : 0;        
     }
 
     private Map<String, int[]> criarMapeamento(){
@@ -115,13 +117,15 @@ public class FormPrincipal extends JFrame {
     private void criarTabuleiro(){
         for (int i = 0; i < 9; i++) {
             JLabel label = new JLabel();
-            label.setFont(new Font("Verdana", 0, 40));
+            label.setFont(new Font("Verdana", 0, 50));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             
-            int leftBorder = (i % 3 == 0) ? 0 : 2;
-            int topBorder = (i < 3) ? 0 : 2;
-            int rightBorder = (i == 2 || i == 5 || i == 8) ? 0 : 2;
-            int bottomBorder = (i > 5) ? 0 : 2;
+            final int borderWeight = 1;
+
+            int leftBorder = (i % 3 == 0) ? 0 : borderWeight;
+            int topBorder = (i < 3) ? 0 : borderWeight;
+            int rightBorder = (i == 2 || i == 5 || i == 8) ? 0 : borderWeight;
+            int bottomBorder = (i > 5) ? 0 : borderWeight;
             
             Border border = BorderFactory.createMatteBorder(topBorder, leftBorder, bottomBorder, rightBorder, Color.BLACK);
             label.setBorder(border);
@@ -133,13 +137,13 @@ public class FormPrincipal extends JFrame {
                    int[] coordenadas = mapamentoTabuleiro.get(label.getName());
 
                    // Validar o valor a ser colocado - vai depender de quem for o jogador
-                   tabuleiro[coordenadas[0]][coordenadas[1]] = jogador ? 3 : 5;
+                   tabuleiro[coordenadas[0]][coordenadas[1]] = jogadores[indexJogadorAtual].getMultiplicador();
+                   label.setText(jogadores[indexJogadorAtual].getSimbolo());
+                   trocarJogadorAtual();
+                   label.removeMouseListener(this);
 
                    //Apenas para testes
                    printTabuleiro();
-                   label.setText(jogador ? "O" : "X");
-
-                   jogador = !jogador;
                 }  
             });
             painelCentro.add(label);
@@ -157,7 +161,7 @@ public class FormPrincipal extends JFrame {
     private void criarPainelFooter() {
         painelFooter = new JPanel();
         painelFooter.setPreferredSize(new Dimension(0, 100));
-        painelFooter.setBackground(Color.GRAY);
+        //painelFooter.setBackground(Color.GRAY);
 
         add(painelFooter, BorderLayout.PAGE_END);
     }
@@ -171,7 +175,7 @@ public class FormPrincipal extends JFrame {
     private void criarPainelHeader() {
         painelHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         painelHeader.setPreferredSize(new Dimension(0, 60));
-        painelHeader.setBackground(Color.GRAY);
+        painelHeader.setBackground(new Color(219, 219, 219));
 
         lbUsuario1 = new JLabel("Jogador 1:");
         painelHeader.add(lbUsuario1);

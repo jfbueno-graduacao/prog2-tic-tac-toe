@@ -3,7 +3,11 @@ public class JogadorO extends Jogador implements IJogador {
         super(nome);
     }
 
-    public void jogar(){
+    public int getMultiplicador(){
+        return 5;
+    }
 
+    public String getSimbolo(){
+        return "O";
     }
 }

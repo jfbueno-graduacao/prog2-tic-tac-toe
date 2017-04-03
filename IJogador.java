@@ -1,3 +1,4 @@
 public interface IJogador{
-    public void jogar();
+    public int getMultiplicador();
+    public String getSimbolo();
 }
