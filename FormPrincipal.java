@@ -257,6 +257,7 @@ public class FormPrincipal extends JFrame {
                 btDefUsuarios.setEnabled(false);
                 txtUsuario1.setEnabled(false);
                 txtUsuario2.setEnabled(false);
+                desbloquearTabuleiro();
             }
         });
 
