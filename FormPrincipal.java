@@ -33,7 +33,7 @@ import java.util.Map;
 public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;
     private int[][] tabuleiro = new int[3][3];
-    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();
+    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
     private IJogador[] jogadores;
     private int indexJogadorAtual = 0;
 
@@ -89,7 +89,7 @@ public class FormPrincipal extends JFrame {
         lbJogadorAtual.setText(String.format("Vez de %s", ((Jogador)jogadores[indexJogadorAtual]).getNome()));
     }
 
-    private Map<String, int[]> criarMapeamento(){
+    private Map<String, int[]> criarMapeamento(){// ask: explica essa logica o que é map.put
         Map<String, int[]> map = new HashMap<>();
         map.put("0", new int[] {0, 0});
         map.put("1", new int[] {0, 1});
@@ -272,7 +272,7 @@ public class FormPrincipal extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    JPanel painelHeader, painelCentro, painelFooter;
+    JPanel painelHeader, painelCentro, painelFooter;//ask: pra que isso?
     JMenuBar barraMenuPrincipal;
     JMenu menuOperacoes;
     JMenuItem menuItemSair;
