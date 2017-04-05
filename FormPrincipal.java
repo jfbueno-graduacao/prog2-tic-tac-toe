@@ -31,9 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FormPrincipal extends JFrame {
-    private static final long serialVersionUID = 1L;
-    private int[][] tabuleiro = new int[3][3];
+    private static final long serialVersionUID = 1L;    
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
+
+    private int[][] tabuleiro = new int[3][3];
     private IJogador[] jogadores;
     private int indexJogadorAtual = 0;
 
@@ -194,12 +195,11 @@ public class FormPrincipal extends JFrame {
                     somasDiagonais[1] += tabuleiro[linha][coluna];
                 }
 
-                if( somaLinha == 9 || somaLinha == 25 || 
-                    somasColunas[coluna] == 9 || somasColunas[coluna] == 25 ||
-                    somasDiagonais[0] == 9 || somasDiagonais[0] == 25 ||
-                    somasDiagonais[1] == 9 || somasDiagonais[1] == 25)
-                {
-                    JOptionPane.showMessageDialog(null, "Temos um vencedor", "", JOptionPane.INFORMATION_MESSAGE);
+                if( somaLinha == 9 || somasColunas[coluna] == 9 || somasDiagonais[0] == 9 || somasDiagonais[1] == 9){
+                    JOptionPane.showMessageDialog(null, "9 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else if(somaLinha == 15 || somasColunas[coluna] == 15 || somasDiagonais[0] == 15 || somasDiagonais[1] == 15){
+                    JOptionPane.showMessageDialog(null, "15 venceu", "", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
@@ -272,7 +272,7 @@ public class FormPrincipal extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    JPanel painelHeader, painelCentro, painelFooter;//ask: pra que isso?
+    JPanel painelHeader, painelCentro, painelFooter;
     JMenuBar barraMenuPrincipal;
     JMenu menuOperacoes;
     JMenuItem menuItemSair;
