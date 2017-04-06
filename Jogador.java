@@ -1,7 +1,8 @@
+
 public abstract class Jogador {
     private String nome;
     private int partidasGanhas;
-    public int partidasPerdidas;
+    private int partidasPerdidas;
 
     public Jogador(String nome){
         this.nome = nome;
@@ -21,5 +22,11 @@ public abstract class Jogador {
 
     public void setPartidasGanhas(int partidasGanhas) {
         this.partidasGanhas = partidasGanhas;
+    }
+    public void setPartidasPerdidas(int partidasPerdidas){
+    	this.partidasPerdidas=partidasPerdidas;
+    }
+    public int getPartidasPerdidas(){
+    	return partidasPerdidas;
     }
 }
