@@ -11,6 +11,10 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
 
@@ -31,10 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FormPrincipal extends JFrame {
-    private static final long serialVersionUID = 1L;    
-    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
-
+    private static final long serialVersionUID = 1L;
     private int[][] tabuleiro = new int[3][3];
+    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
     private IJogador[] jogadores;
     private int indexJogadorAtual = 0;
 
@@ -195,11 +198,13 @@ public class FormPrincipal extends JFrame {
                     somasDiagonais[1] += tabuleiro[linha][coluna];
                 }
 
-                if( somaLinha == 9 || somasColunas[coluna] == 9 || somasDiagonais[0] == 9 || somasDiagonais[1] == 9){
-                    JOptionPane.showMessageDialog(null, "9 venceu", "", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else if(somaLinha == 15 || somasColunas[coluna] == 15 || somasDiagonais[0] == 15 || somasDiagonais[1] == 15){
-                    JOptionPane.showMessageDialog(null, "15 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                if( somaLinha == 9 || somaLinha == 25 || 
+                    somasColunas[coluna] == 9 || somasColunas[coluna] == 25 ||
+                    somasDiagonais[0] == 9 || somasDiagonais[0] == 25 ||
+                    somasDiagonais[1] == 9 || somasDiagonais[1] == 25)
+                {
+                    
+                	JOptionPane.showMessageDialog(null, "Temos um vencedor");
                 }
             }
         }
@@ -271,8 +276,16 @@ public class FormPrincipal extends JFrame {
         pack();
         setLocationRelativeTo(null);
     }
-
-    JPanel painelHeader, painelCentro, painelFooter;
+    public void gravaDados() throws IOException{
+    	FileWriter fw=new FileWriter("dados.txt",false);
+    	PrintWriter pw =new PrintWriter(fw);
+    	
+    	pw.println(jogadores[0]);
+    	
+    	fw.close();
+    }
+    
+    JPanel painelHeader, painelCentro, painelFooter;//ask: pra que isso?
     JMenuBar barraMenuPrincipal;
     JMenu menuOperacoes;
     JMenuItem menuItemSair;
