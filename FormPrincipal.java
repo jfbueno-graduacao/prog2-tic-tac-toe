@@ -90,7 +90,7 @@ public class FormPrincipal extends JFrame {
         lbJogadorAtual.setText(String.format("Vez de %s", ((Jogador)jogadores[indexJogadorAtual]).getNome()));
     }
 
-    private Map<String, int[]> criarMapeamento(){// ask: explica essa logica o que é map.put
+    private Map<String, int[]> criarMapeamento(){
         Map<String, int[]> map = new HashMap<>();
         map.put("0", new int[] {0, 0});
         map.put("1", new int[] {0, 1});
@@ -103,6 +103,52 @@ public class FormPrincipal extends JFrame {
         map.put("8", new int[] {2, 2});
         return map;
     }
+    
+    private void verificaGanhador(){
+        int[] somasColunas = {0, 0, 0};
+        int[] somasDiagonais = {0, 0}; // 0 é a principal, 1 é a secundária
+
+    	for(int linha = 0; linha < tabuleiro.length; linha++){
+            int somaLinha = 0;
+            for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
+                somaLinha += tabuleiro[linha][coluna];
+                somasColunas[coluna] += tabuleiro[linha][coluna];
+
+                if(linha == coluna){ // Diagonal principal
+                    somasDiagonais[0] += tabuleiro[linha][coluna];
+                }
+                
+                if(linha + coluna == tabuleiro.length - 1){
+                    somasDiagonais[1] += tabuleiro[linha][coluna];
+                }
+
+                if( somaLinha == 9 || somasColunas[coluna] == 9 || somasDiagonais[0] == 9 || somasDiagonais[1] == 9){
+                    JOptionPane.showMessageDialog(null, "9 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else if(somaLinha == 15 || somasColunas[coluna] == 15 || somasDiagonais[0] == 15 || somasDiagonais[1] == 15){
+                    JOptionPane.showMessageDialog(null, "15 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else if(casasDisponiveis() == 0){
+                    JOptionPane.showMessageDialog(null, "its a draw", "", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private int casasDisponiveis(){
+        int qtdCasasVazias = 0;
+
+        for(int l = 0; l < tabuleiro.length; l++){
+            for(int c = 0; c < tabuleiro[l].length; c++){
+                if(tabuleiro[l][c] == 0)
+                    qtdCasasVazias += 1;
+            }
+        }
+
+        return qtdCasasVazias;
+    }
+
+    /* ---- Criação da interface gráfica ---- */
 
     private void initComponents() {
         barraMenuPrincipal = new JMenuBar();
@@ -176,32 +222,6 @@ public class FormPrincipal extends JFrame {
                 }  
             });
             painelCentro.add(label);
-        }
-    }
-
-    private void verificaGanhador(){
-        int[] somasColunas = {0, 0, 0};
-        int[] somasDiagonais = {0, 0}; // 0 é a principal, 1 é a secundária
-
-    	for(int linha = 0; linha < tabuleiro.length; linha++){
-            int somaLinha = 0;
-            for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
-                somaLinha += tabuleiro[linha][coluna];
-                somasColunas[coluna] += tabuleiro[linha][coluna];
-
-                if(linha == coluna){ // Diagonal principal
-                    somasDiagonais[0] += tabuleiro[linha][coluna];
-                }else if(linha + coluna == tabuleiro.length){
-                    somasDiagonais[1] += tabuleiro[linha][coluna];
-                }
-
-                if( somaLinha == 9 || somasColunas[coluna] == 9 || somasDiagonais[0] == 9 || somasDiagonais[1] == 9){
-                    JOptionPane.showMessageDialog(null, "9 venceu", "", JOptionPane.INFORMATION_MESSAGE);
-                }
-                else if(somaLinha == 15 || somasColunas[coluna] == 15 || somasDiagonais[0] == 15 || somasDiagonais[1] == 15){
-                    JOptionPane.showMessageDialog(null, "15 venceu", "", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
         }
     }
 
