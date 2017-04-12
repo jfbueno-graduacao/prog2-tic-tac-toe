@@ -23,9 +23,11 @@ public abstract class Jogador {
     public void setPartidasGanhas(int partidasGanhas) {
         this.partidasGanhas = partidasGanhas;
     }
+
     public void setPartidasPerdidas(int partidasPerdidas){
     	this.partidasPerdidas=partidasPerdidas;
     }
+    
     public int getPartidasPerdidas(){
     	return partidasPerdidas;
     }

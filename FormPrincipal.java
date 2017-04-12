@@ -34,7 +34,7 @@ public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;    
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
 
-    private int[][] tabuleiro = new int[3][3];
+    private int[][] tabuleiro;
     private IJogador[] jogadores;
     private int indexJogadorAtual = 0;
 
@@ -53,8 +53,31 @@ public class FormPrincipal extends JFrame {
         super();
         initForm();
         initComponents();
-        setTitle("Jogo da Velha");
+        setTabuleiro();
         bloquearTabuleiro();
+    }
+
+    private void setTabuleiro(){
+        tabuleiro = new int[3][3];
+    }
+
+    private void reiniciarJogo(){
+        setTabuleiro();
+        painelCentro = null;
+        criarPainelCentro();
+        criarTabuleiro();
+        painelCentro.revalidate();
+        trocarJogadorAtual(0);
+    }
+
+    private void finalizarPartida(IJogador vencedor){
+        if(vencedor == null){
+            JOptionPane.showMessageDialog(null, "Empate!", "", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String fraseVencedor = String.format("%s venceu!", ((Jogador)vencedor).getNome());
+        JOptionPane.showMessageDialog(null, fraseVencedor, "", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void bloquearTabuleiro(){
@@ -82,7 +105,12 @@ public class FormPrincipal extends JFrame {
     }
 
     private void trocarJogadorAtual(){
-        indexJogadorAtual = indexJogadorAtual == 0 ? 1 : 0;
+        int prox = indexJogadorAtual == 0 ? 1 : 0;
+        trocarJogadorAtual(prox);
+    }
+
+    private void trocarJogadorAtual(int indexProximo){
+        indexJogadorAtual = indexProximo;
         mostrarJogadorAtual();
     }
 
@@ -108,7 +136,10 @@ public class FormPrincipal extends JFrame {
         int[] somasColunas = {0, 0, 0};
         int[] somasDiagonais = {0, 0}; // 0 é a principal, 1 é a secundária
 
-    	for(int linha = 0; linha < tabuleiro.length; linha++){
+        int m0 = jogadores[0].getMultiplicador() * 3;
+        int m1 = jogadores[1].getMultiplicador() * 3;
+
+        for(int linha = 0; linha < tabuleiro.length; linha++){
             int somaLinha = 0;
             for(int coluna = 0; coluna < tabuleiro[linha].length; coluna++){
                 somaLinha += tabuleiro[linha][coluna];
@@ -122,14 +153,17 @@ public class FormPrincipal extends JFrame {
                     somasDiagonais[1] += tabuleiro[linha][coluna];
                 }
 
-                if( somaLinha == 9 || somasColunas[coluna] == 9 || somasDiagonais[0] == 9 || somasDiagonais[1] == 9){
-                    JOptionPane.showMessageDialog(null, "9 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                if(somaLinha == m0|| somasColunas[coluna] == m0 || somasDiagonais[0] == m0 || somasDiagonais[1] == m0){
+                    finalizarPartida(jogadores[0]);
+                    break;
                 }
-                else if(somaLinha == 15 || somasColunas[coluna] == 15 || somasDiagonais[0] == 15 || somasDiagonais[1] == 15){
-                    JOptionPane.showMessageDialog(null, "15 venceu", "", JOptionPane.INFORMATION_MESSAGE);
+                else if(somaLinha == m1 || somasColunas[coluna] == m1 || somasDiagonais[0] == m1 || somasDiagonais[1] == m1){
+                    finalizarPartida(jogadores[1]);
+                    break;
                 }
                 else if(casasDisponiveis() == 0){
-                    JOptionPane.showMessageDialog(null, "its a draw", "", JOptionPane.INFORMATION_MESSAGE);
+                    finalizarPartida(null);
+                    break;
                 }
             }
         }
@@ -151,27 +185,33 @@ public class FormPrincipal extends JFrame {
     /* ---- Criação da interface gráfica ---- */
 
     private void initComponents() {
+        setTitle("Jogo da Velha");
+
         barraMenuPrincipal = new JMenuBar();
         
         menuOperacoes = new JMenu("Operações");// menu externo
-        JMenu menuHelp = new JMenu("Ajuda");
-        menuHelp.addActionListener(new ActionListener(){
-    		public void actionPerformed(ActionEvent e){
-    			//ação pro menu Ajuda
-    		}
-        });
-        menuItemSair = new JMenuItem("Sair");// menu interno
-        menuItemSair.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(JOptionPane.showConfirmDialog(null, "Deseja Realmente sair? ") == 0){
-            		System.exit(0);// ação para sair
-                }
+        
+        JMenuItem menuItemReiniciar = new JMenuItem("Reiniciar jogo");
+        menuItemReiniciar.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if(JOptionPane.showConfirmDialog(painelHeader, "Deseja abandonar a partida?\nO estado atual não será salvo.", "Reiniciar", JOptionPane.YES_NO_OPTION) == 0){
+                    reiniciarJogo();
+                }                
             }
         });
 
+        menuItemSair = new JMenuItem("Sair");// menu interno
+        menuItemSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(JOptionPane.showConfirmDialog(painelHeader, "Deseja Realmente sair?", "Sair do jogo", JOptionPane.YES_NO_OPTION) == 0){
+                    System.exit(0);
+                }
+            }
+        });
+        
         menuOperacoes.add(menuItemSair);// add os items no menu
+        menuOperacoes.add(menuItemReiniciar);
         barraMenuPrincipal.add(menuOperacoes);
-        barraMenuPrincipal.add(menuHelp);
         setJMenuBar(barraMenuPrincipal);
 
         BorderLayout borderLayout = new BorderLayout(0, 10);
