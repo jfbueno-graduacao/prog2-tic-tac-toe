@@ -208,6 +208,14 @@ public class FormPrincipal extends JFrame {
                 }
             }
         });
+
+        JMenuItem menuSalvar = new JMenuItem("Salvarrrrrrr");
+        menuSalvar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Gravador.gravar((Jogador)jogadores[0]);                
+            }
+        });
+        menuOperacoes.add(menuSalvar);
         
         menuOperacoes.add(menuItemSair);// add os items no menu
         menuOperacoes.add(menuItemReiniciar);

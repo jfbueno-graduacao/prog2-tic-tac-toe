@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public abstract class Jogador {
+public abstract class Jogador implements Serializable {
     private String nome;
     private int partidasGanhas;
     private int partidasPerdidas;
@@ -25,7 +26,7 @@ public abstract class Jogador {
     }
 
     public void setPartidasPerdidas(int partidasPerdidas){
-    	this.partidasPerdidas=partidasPerdidas;
+    	this.partidasPerdidas = partidasPerdidas;
     }
     
     public int getPartidasPerdidas(){
