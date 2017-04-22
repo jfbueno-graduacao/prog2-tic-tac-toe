@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class FormPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;    
-    private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
+    private Map<String, Coordenadas> mapamentoTabuleiro = criarMapeamento();
 
     private int[][] tabuleiro;
     private Player[] jogadores;
@@ -56,6 +56,7 @@ public class FormPrincipal extends JFrame {
         initForm();
         initComponents();
         setTabuleiro();
+        novoJogo();
         bloquearTabuleiro();
     }
 
@@ -63,23 +64,33 @@ public class FormPrincipal extends JFrame {
         tabuleiro = new int[3][3];
     }
 
-    private void reiniciarJogo(){
+    private void novoJogo(){
         setTabuleiro();
-        painelCentro = null;
-        criarPainelCentro();
-        criarTabuleiro();
+
+        painelCentro.removeAll();
+        painelCentro.repaint();
         painelCentro.revalidate();
-        trocarJogadorAtual(0);
+        
+        criarTabuleiro();
+        painelCentro.repaint();
+        painelCentro.revalidate();
+        
+        menuItemNovoJogo.setEnabled(false);    
+        menuItemReiniciar.setEnabled(true);
     }
 
-    private void finalizarPartida(Player vencedor){
+    private void finalizarPartida(Player vencedor){        
+        bloquearTabuleiro();
+        menuItemNovoJogo.setEnabled(true);        
+        menuItemReiniciar.setEnabled(false);
+
         if(vencedor == null){
-            JOptionPane.showMessageDialog(null, "Empate!", "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Empate!", "Fim de jogo", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         String fraseVencedor = String.format("%s venceu!", vencedor.getJogador().getNome());
-        JOptionPane.showMessageDialog(null, fraseVencedor, "", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, fraseVencedor, "Fim de jogo", JOptionPane.INFORMATION_MESSAGE);
 
         vencedor.adicionarVitoria();
 
@@ -91,8 +102,6 @@ public class FormPrincipal extends JFrame {
 
         repositorio.atualizarOuCriar(jogadores[0].getJogador());
         repositorio.atualizarOuCriar(jogadores[1].getJogador());
-
-        trocarEstadoTabuleiro(true);
     }
 
     private void bloquearTabuleiro(){
@@ -142,17 +151,17 @@ public class FormPrincipal extends JFrame {
         lbJogadorAtual.setText(String.format("Vez de %s", jogadores[indexJogadorAtual].getJogador().getNome()));
     }
 
-    private Map<String, int[]> criarMapeamento(){
-        Map<String, int[]> map = new HashMap<>();
-        map.put("0", new int[] {0, 0});
-        map.put("1", new int[] {0, 1});
-        map.put("2", new int[] {0, 2});
-        map.put("3", new int[] {1, 0});
-        map.put("4", new int[] {1, 1});
-        map.put("5", new int[] {1, 2});
-        map.put("6", new int[] {2, 0});
-        map.put("7", new int[] {2, 1});
-        map.put("8", new int[] {2, 2});
+    private Map<String, Coordenadas> criarMapeamento(){
+        Map<String, Coordenadas> map = new HashMap<>();
+        map.put("0", new Coordenadas(0, 0));
+        map.put("1", new Coordenadas(0, 1));
+        map.put("2", new Coordenadas(0, 2));
+        map.put("3", new Coordenadas(1, 0));
+        map.put("4", new Coordenadas(1, 1));
+        map.put("5", new Coordenadas(1, 2));
+        map.put("6", new Coordenadas(2, 0));
+        map.put("7", new Coordenadas(2, 1));
+        map.put("8", new Coordenadas(2, 2));
         return map;
     }
     
@@ -179,15 +188,15 @@ public class FormPrincipal extends JFrame {
 
                 if(somaLinha == m0|| somasColunas[coluna] == m0 || somasDiagonais[0] == m0 || somasDiagonais[1] == m0){
                     finalizarPartida(jogadores[0]);
-                    break;
+                    return;
                 }
                 else if(somaLinha == m1 || somasColunas[coluna] == m1 || somasDiagonais[0] == m1 || somasDiagonais[1] == m1){
                     finalizarPartida(jogadores[1]);
-                    break;
+                    return;
                 }
                 else if(casasDisponiveis() == 0){
                     finalizarPartida(null);
-                    break;
+                    return;
                 }
             }
         }
@@ -213,13 +222,14 @@ public class FormPrincipal extends JFrame {
 
         barraMenuPrincipal = new JMenuBar();
         
-        menuOperacoes = new JMenu("Operações");// menu externo
+        menuJogo = new JMenu("Jogo");// menu externo
         
-        JMenuItem menuItemReiniciar = new JMenuItem("Reiniciar jogo");
+        menuItemReiniciar = new JMenuItem("Reiniciar jogo atual");
         menuItemReiniciar.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(JOptionPane.showConfirmDialog(painelHeader, "Deseja abandonar a partida?\nO estado atual não será salvo.", "Reiniciar", JOptionPane.YES_NO_OPTION) == 0){
-                    reiniciarJogo();
+                    novoJogo();                    
+                    trocarJogadorAtual(0);
                 }                
             }
         });
@@ -233,26 +243,17 @@ public class FormPrincipal extends JFrame {
             }
         });
 
-        JMenuItem menuSalvar = new JMenuItem("Salvarrrrrrr");
-        menuSalvar.addActionListener(new ActionListener() {
+        menuItemNovoJogo = new JMenuItem("Jogar novamente");      
+        menuItemNovoJogo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+                novoJogo();
             }
         });
-        menuOperacoes.add(menuSalvar);
-
-        JMenuItem menuTeste = new JMenuItem("Teste");
-        menuTeste.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Jogador jog = repositorio.buscarPorChave("Jeferson");
-                System.out.println(jog.getNome());
-            }
-        });
-        menuOperacoes.add(menuTeste);
         
-        menuOperacoes.add(menuItemSair);// add os items no menu
-        menuOperacoes.add(menuItemReiniciar);
-        barraMenuPrincipal.add(menuOperacoes);
+        menuJogo.add(menuItemNovoJogo);
+        menuJogo.add(menuItemReiniciar);
+        menuJogo.add(menuItemSair);// add os items no menu
+        barraMenuPrincipal.add(menuJogo);
         setJMenuBar(barraMenuPrincipal);
 
         BorderLayout borderLayout = new BorderLayout(0, 10);
@@ -261,7 +262,6 @@ public class FormPrincipal extends JFrame {
         criarPainelHeader();
         criarPainelCentro();
         criarPainelFooter();
-        criarTabuleiro();
     }
 
     private void criarTabuleiro(){
@@ -284,14 +284,14 @@ public class FormPrincipal extends JFrame {
             label.addMouseListener(new MouseAdapter() {  
                 public void mouseClicked(MouseEvent e) {  
                     JLabel label = (JLabel) e.getSource();
-
+                    
                     if(!label.isEnabled()){
                         return;
                     }
 
-                    int[] coordenadas = mapamentoTabuleiro.get(label.getName());
+                    Coordenadas coordenadas =  mapamentoTabuleiro.get(label.getName());
 
-                    tabuleiro[coordenadas[0]][coordenadas[1]] = jogadores[indexJogadorAtual].getMultiplicador();
+                    tabuleiro[coordenadas.getX()][coordenadas.getY()] = jogadores[indexJogadorAtual].getMultiplicador();
                     label.setText(jogadores[indexJogadorAtual].getSimbolo());
                     trocarJogadorAtual();
                     label.removeMouseListener(this);
@@ -375,8 +375,8 @@ public class FormPrincipal extends JFrame {
 
     JPanel painelHeader, painelCentro, painelFooter;
     JMenuBar barraMenuPrincipal;
-    JMenu menuOperacoes;
-    JMenuItem menuItemSair;
+    JMenu menuJogo;
+    JMenuItem menuItemSair, menuItemNovoJogo, menuItemReiniciar;
     JLabel lbUsuario1, lbUsuario2, lbJogadorAtual;
     JTextField txtUsuario1, txtUsuario2;
     JButton btDefUsuarios;
