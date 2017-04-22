@@ -35,8 +35,10 @@ public class FormPrincipal extends JFrame {
     private Map<String, int[]> mapamentoTabuleiro = criarMapeamento();// ask: oq é isso?
 
     private int[][] tabuleiro;
-    private IJogador[] jogadores;
+    private Player[] jogadores;
     private int indexJogadorAtual = 0;
+
+    private RepositorioJogadores repositorio = new RepositorioJogadores();
 
     //Apenas para teste
     private void printTabuleiro(){
@@ -70,14 +72,27 @@ public class FormPrincipal extends JFrame {
         trocarJogadorAtual(0);
     }
 
-    private void finalizarPartida(IJogador vencedor){
+    private void finalizarPartida(Player vencedor){
         if(vencedor == null){
             JOptionPane.showMessageDialog(null, "Empate!", "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
-        String fraseVencedor = String.format("%s venceu!", ((Jogador)vencedor).getNome());
+        String fraseVencedor = String.format("%s venceu!", vencedor.getJogador().getNome());
         JOptionPane.showMessageDialog(null, fraseVencedor, "", JOptionPane.INFORMATION_MESSAGE);
+
+        vencedor.adicionarVitoria();
+
+        for(Player jogador : jogadores){
+            if(jogador != vencedor){
+                jogador.adicionarDerrota();
+            }
+        }
+
+        repositorio.atualizarOuCriar(jogadores[0].getJogador());
+        repositorio.atualizarOuCriar(jogadores[1].getJogador());
+
+        trocarEstadoTabuleiro(true);
     }
 
     private void bloquearTabuleiro(){
@@ -96,10 +111,19 @@ public class FormPrincipal extends JFrame {
     }
 
     private void inicializarJogadores(){
-        jogadores = new IJogador[2];
+        jogadores = new Player[2];
 
-        jogadores[0] = new JogadorX(txtUsuario1.getText());
-        jogadores[1] = new JogadorO(txtUsuario2.getText());   
+        String nomeJogador1 = txtUsuario1.getText();
+        String nomeJogador2 = txtUsuario2.getText();
+
+        Jogador jogador1 = repositorio.buscarPorChave(nomeJogador1);
+        Jogador jogador2 = repositorio.buscarPorChave(nomeJogador2);
+
+        jogador1 = jogador1 == null ? new Jogador(nomeJogador1) : jogador1;
+        jogador2 = jogador2 == null ? new Jogador(nomeJogador2) : jogador2;
+
+        jogadores[0] = new Player(jogador1, 3, "X");
+        jogadores[1] = new Player(jogador2, 5, "O");
 
         mostrarJogadorAtual();    
     }
@@ -115,7 +139,7 @@ public class FormPrincipal extends JFrame {
     }
 
     private void mostrarJogadorAtual(){
-        lbJogadorAtual.setText(String.format("Vez de %s", ((Jogador)jogadores[indexJogadorAtual]).getNome()));
+        lbJogadorAtual.setText(String.format("Vez de %s", jogadores[indexJogadorAtual].getJogador().getNome()));
     }
 
     private Map<String, int[]> criarMapeamento(){
@@ -212,10 +236,19 @@ public class FormPrincipal extends JFrame {
         JMenuItem menuSalvar = new JMenuItem("Salvarrrrrrr");
         menuSalvar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Gravador.gravar((Jogador)jogadores[0]);                
+                
             }
         });
         menuOperacoes.add(menuSalvar);
+
+        JMenuItem menuTeste = new JMenuItem("Teste");
+        menuTeste.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Jogador jog = repositorio.buscarPorChave("Jeferson");
+                System.out.println(jog.getNome());
+            }
+        });
+        menuOperacoes.add(menuTeste);
         
         menuOperacoes.add(menuItemSair);// add os items no menu
         menuOperacoes.add(menuItemReiniciar);
@@ -262,9 +295,9 @@ public class FormPrincipal extends JFrame {
                     label.setText(jogadores[indexJogadorAtual].getSimbolo());
                     trocarJogadorAtual();
                     label.removeMouseListener(this);
-
+                    
                     // todo: Remover (Apenas para testes)
-                    printTabuleiro();
+                    // --printTabuleiro();
 
                     verificaGanhador();
                 }  

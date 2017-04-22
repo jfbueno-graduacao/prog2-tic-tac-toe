@@ -1,6 +1,4 @@
-import java.io.Serializable;
-
-public abstract class Jogador implements Serializable {
+public class Jogador {
     private String nome;
     private int partidasGanhas;
     private int partidasPerdidas;
@@ -17,7 +15,7 @@ public abstract class Jogador implements Serializable {
         this.nome = nome;
     }
 
-    public int getPartidasGanhas() {
+    public int getPartidasGanhas() {   
         return this.partidasGanhas;
     }
 
@@ -33,7 +31,7 @@ public abstract class Jogador implements Serializable {
     	return partidasPerdidas;
     }
 
-    public String getString(){
-        return String.format("%s|%s|%s", nome, partidasGanhas, partidasPerdidas);
+    public String toString(){        
+        return String.format("%s %s %s", nome, partidasGanhas, partidasPerdidas);
     }
 }
