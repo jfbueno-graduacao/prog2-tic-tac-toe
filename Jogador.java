@@ -32,4 +32,8 @@ public abstract class Jogador implements Serializable {
     public int getPartidasPerdidas(){
     	return partidasPerdidas;
     }
+
+    public String getString(){
+        return String.format("%s|%s|%s", nome, partidasGanhas, partidasPerdidas);
+    }
 }
