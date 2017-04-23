@@ -35,10 +35,10 @@ public class FormPrincipal extends JFrame {
     private Map<String, Coordenadas> mapamentoTabuleiro = criarMapeamento();
 
     private int[][] tabuleiro;
-    private Player[] jogadores;
+    private Jogador[] jogadores;
     private int indexJogadorAtual = 0;
 
-    private RepositorioJogadores repositorio = new RepositorioJogadores();
+    private IRepositorio<Usuario, String> repositorio = new RepositorioUsuarios();
 
     //Apenas para teste
     private void printTabuleiro(){
@@ -79,7 +79,7 @@ public class FormPrincipal extends JFrame {
         menuItemReiniciar.setEnabled(true);
     }
 
-    private void finalizarPartida(Player vencedor){        
+    private void finalizarPartida(Jogador vencedor){        
         bloquearTabuleiro();
         menuItemNovoJogo.setEnabled(true);        
         menuItemReiniciar.setEnabled(false);
@@ -89,19 +89,19 @@ public class FormPrincipal extends JFrame {
             return;
         }
 
-        String fraseVencedor = String.format("%s venceu!", vencedor.getJogador().getNome());
+        String fraseVencedor = String.format("%s venceu!", vencedor.getUsuario().getNome());
         JOptionPane.showMessageDialog(null, fraseVencedor, "Fim de jogo", JOptionPane.INFORMATION_MESSAGE);
 
         vencedor.adicionarVitoria();
 
-        for(Player jogador : jogadores){
+        for(Jogador jogador : jogadores){
             if(jogador != vencedor){
                 jogador.adicionarDerrota();
             }
         }
 
-        repositorio.atualizarOuCriar(jogadores[0].getJogador());
-        repositorio.atualizarOuCriar(jogadores[1].getJogador());
+        repositorio.atualizarOuCriar(jogadores[0].getUsuario());
+        repositorio.atualizarOuCriar(jogadores[1].getUsuario());
     }
 
     private void bloquearTabuleiro(){
@@ -120,19 +120,19 @@ public class FormPrincipal extends JFrame {
     }
 
     private void inicializarJogadores(){
-        jogadores = new Player[2];
+        jogadores = new Jogador[2];
 
-        String nomeJogador1 = txtUsuario1.getText();
-        String nomeJogador2 = txtUsuario2.getText();
+        String nomeUsuario1 = txtUsuario1.getText();
+        String nomeUsuario2 = txtUsuario2.getText();
 
-        Jogador jogador1 = repositorio.buscarPorChave(nomeJogador1);
-        Jogador jogador2 = repositorio.buscarPorChave(nomeJogador2);
+        Usuario usuario1 = repositorio.buscarPorChave(nomeUsuario1);
+        Usuario usuario2 = repositorio.buscarPorChave(nomeUsuario2);
 
-        jogador1 = jogador1 == null ? new Jogador(nomeJogador1) : jogador1;
-        jogador2 = jogador2 == null ? new Jogador(nomeJogador2) : jogador2;
+        usuario1 = usuario1 == null ? new Usuario(nomeUsuario1) : usuario1;
+        usuario2 = usuario2 == null ? new Usuario(nomeUsuario2) : usuario2;
 
-        jogadores[0] = new Player(jogador1, 3, "X");
-        jogadores[1] = new Player(jogador2, 5, "O");
+        jogadores[0] = new Jogador(usuario1, 3, "X");
+        jogadores[1] = new Jogador(usuario2, 5, "O");
 
         mostrarJogadorAtual();    
     }
@@ -148,7 +148,7 @@ public class FormPrincipal extends JFrame {
     }
 
     private void mostrarJogadorAtual(){
-        lbJogadorAtual.setText(String.format("Vez de %s", jogadores[indexJogadorAtual].getJogador().getNome()));
+        lbJogadorAtual.setText(String.format("Vez de %s", jogadores[indexJogadorAtual].getUsuario().getNome()));
     }
 
     private Map<String, Coordenadas> criarMapeamento(){

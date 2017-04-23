@@ -1,2 +1,8 @@
 *.class
 *.db
+
+tasks.json
+
+/bin
+/.vscode
+

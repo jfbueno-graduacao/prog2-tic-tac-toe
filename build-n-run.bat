@@ -1,5 +1,13 @@
-del *.class
+if not exist ".\bin\" mkdir .\bin
 
-javac Program.java -d . -encoding UTF-8
+del .\bin\*.class
+
+javac Program.java -d .\bin -encoding UTF-8
+
+cd bin
 
 java Program
+
+cd ..
+
+

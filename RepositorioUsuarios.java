@@ -10,18 +10,18 @@ import java.io.File;
 
 import java.util.regex.Pattern;
 
-public class RepositorioJogadores implements IRepositorio<Jogador, String> {
-    private static final File arquivo = new File("_jogadores.db");
+public class RepositorioUsuarios implements IRepositorio<Usuario, String> {
+    private static final File arquivo = new File("usuarios.db");
     private static final String separador = "|";
     private static final Charset charset = StandardCharsets.UTF_8;
 
     private List<String> fonteDados;
 
-    public RepositorioJogadores(){
+    public RepositorioUsuarios(){
         carregarDados();      
     }
 
-    public Jogador buscarPorChave(String chave){
+    public Usuario buscarPorChave(String chave){
         for(String linha : fonteDados){
             String[] atributos = linha.split(Pattern.quote(separador));
 
@@ -30,7 +30,7 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
             }
 
             if(atributos[0].equals(chave)){
-                Jogador encontrado = deserializar(atributos);
+                Usuario encontrado = deserializar(atributos);
                 return encontrado;
             }
         }
@@ -38,8 +38,8 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
         return null;
     }
 
-    public Jogador[] buscarTodos(){
-        List<Jogador> lista = new ArrayList<>();
+    public Usuario[] buscarTodos(){
+        List<Usuario> lista = new ArrayList<>();
 
         for(String linha : fonteDados){
             String[] atributos = linha.split(Pattern.quote(separador));
@@ -48,14 +48,14 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
                 continue;
             }
             
-            Jogador jogador = deserializar(atributos);
-            lista.add(jogador);             
+            Usuario usuario = deserializar(atributos);
+            lista.add(usuario);             
         }
 
-        return lista.toArray(new Jogador[lista.size()]);
+        return lista.toArray(new Usuario[lista.size()]);
     }
 
-    public void atualizarOuCriar(Jogador entidade) { 
+    public void atualizarOuCriar(Usuario entidade) { 
         if(entidade == null){
             //Lançar exceção
             return;
@@ -81,8 +81,9 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
 
     }
 
-    private void carregarDados(){
-        try {
+    private void carregarDados(){        
+        try {            
+            arquivo.createNewFile();
             fonteDados = new ArrayList<String>(Files.readAllLines(arquivo.toPath(), charset));
         }
         catch(IOException e){
@@ -101,7 +102,7 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
         carregarDados();
     }
 
-    private String serializar(Jogador entidade){
+    private String serializar(Usuario entidade){
         String str = entidade.getNome() + separador + 
                      entidade.getPartidasGanhas() + separador + 
                      entidade.getPartidasPerdidas();
@@ -109,8 +110,8 @@ public class RepositorioJogadores implements IRepositorio<Jogador, String> {
         return str;
     }
 
-    private Jogador deserializar(String[] atributos){
-        Jogador retorno = new Jogador(atributos[0]);
+    private Usuario deserializar(String[] atributos){
+        Usuario retorno = new Usuario(atributos[0]);
         retorno.setPartidasGanhas(Integer.parseInt(atributos[1]));
         retorno.setPartidasPerdidas(Integer.parseInt(atributos[2]));
 

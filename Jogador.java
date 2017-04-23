@@ -1,37 +1,33 @@
 public class Jogador {
-    private String nome;
-    private int partidasGanhas;
-    private int partidasPerdidas;
+    private Usuario usuario;
+    private int multiplicador;
+    private String simbolo;
 
-    public Jogador(String nome){
-        this.nome = nome;
+    public Jogador(Usuario from, int multiplicador, String simbolo){
+        usuario = from;
+        this.multiplicador = multiplicador;
+        this.simbolo = simbolo;
     }
 
-    public String getNome() {
-        return this.nome;
+    public Usuario getUsuario(){
+        return usuario;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public int getMultiplicador() {
+        return this.multiplicador;
     }
 
-    public int getPartidasGanhas() {   
-        return this.partidasGanhas;
+    public String getSimbolo() {
+        return this.simbolo;
+    }    
+
+    public void adicionarVitoria(){
+        int n = usuario.getPartidasGanhas() + 1;
+        usuario.setPartidasGanhas(n);
     }
 
-    public void setPartidasGanhas(int partidasGanhas) {
-        this.partidasGanhas = partidasGanhas;
-    }
-
-    public void setPartidasPerdidas(int partidasPerdidas){
-    	this.partidasPerdidas = partidasPerdidas;
-    }
-    
-    public int getPartidasPerdidas(){
-    	return partidasPerdidas;
-    }
-
-    public String toString(){        
-        return String.format("%s %s %s", nome, partidasGanhas, partidasPerdidas);
+    public void adicionarDerrota(){
+        int n = usuario.getPartidasPerdidas() + 1;
+        usuario.setPartidasPerdidas(n);
     }
 }
