@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public class RepositorioUsuarios implements IRepositorio<Usuario, String> {
-    private static final File arquivo = new File("usuarios.db");
+    private static final File arquivo = new File("_usuarios.db");
     private static final String separador = "|";
     private static final Charset charset = StandardCharsets.UTF_8;
 
@@ -111,10 +111,9 @@ public class RepositorioUsuarios implements IRepositorio<Usuario, String> {
     }
 
     private Usuario deserializar(String[] atributos){
-        Usuario retorno = new Usuario(atributos[0]);
-        retorno.setPartidasGanhas(Integer.parseInt(atributos[1]));
-        retorno.setPartidasPerdidas(Integer.parseInt(atributos[2]));
-
-        return retorno;
+        int partidasGanhas = Integer.parseInt(atributos[1]);
+        int partidasPerdidas = Integer.parseInt(atributos[2]);
+        
+        return new Usuario(atributos[0], partidasGanhas, partidasPerdidas);
     }
 }
