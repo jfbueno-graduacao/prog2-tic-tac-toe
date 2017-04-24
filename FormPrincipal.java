@@ -7,12 +7,13 @@ import java.awt.FlowLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Component;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
-import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -276,6 +277,7 @@ public class FormPrincipal extends JFrame {
     private void criarTabuleiro(){
         for (int i = 0; i < 9; i++) {
             JLabel label = new JLabel();
+            label.setCursor(new Cursor(Cursor.HAND_CURSOR));
             label.setFont(new Font("Verdana", 0, 50));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             
