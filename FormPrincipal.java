@@ -101,6 +101,8 @@ public class FormPrincipal extends JFrame {
 
         repositorio.atualizarOuCriar(jogadores[0].getUsuario());
         repositorio.atualizarOuCriar(jogadores[1].getUsuario());
+
+        atualizarInfoJogadores();
     }
 
     private void bloquearTabuleiro(){
@@ -131,9 +133,17 @@ public class FormPrincipal extends JFrame {
         usuario2 = usuario2 == null ? new Usuario(nomeUsuario2) : usuario2;
 
         jogadores[0] = new Jogador(usuario1, 3, "X");
-        jogadores[1] = new Jogador(usuario2, 5, "O");
+        jogadores[1] = new Jogador(usuario2, 5, "O");        
 
-        mostrarJogadorAtual();    
+        mostrarJogadorAtual();
+        atualizarInfoJogadores(); 
+    }
+
+    private void atualizarInfoJogadores(){
+        Usuario usuario1 = jogadores[0].getUsuario(), usuario2 = jogadores[1].getUsuario();
+
+        lbInfoUsuario1.setText(String.format("%s ganhou %s partidas e perdeu %s", usuario1.getNome(), usuario1.getPartidasGanhas(), usuario1.getPartidasPerdidas()));
+        lbInfoUsuario2.setText(String.format("%s ganhou %s partidas e perdeu %s", usuario2.getNome(), usuario2.getPartidasGanhas(), usuario2.getPartidasPerdidas()));
     }
 
     private void trocarJogadorAtual(){
@@ -305,18 +315,31 @@ public class FormPrincipal extends JFrame {
         }
     }
 
-    private void criarPainelFooter() {
-        painelFooter = new JPanel();
-        painelFooter.setPreferredSize(new Dimension(0, 100));
-        //painelFooter.setBackground(Color.GRAY);
-
-        add(painelFooter, BorderLayout.PAGE_END);
-    }
-
     private void criarPainelCentro() {
         painelCentro = new JPanel(new GridLayout(3, 3));
 
         add(painelCentro, BorderLayout.CENTER);
+    }
+
+    private void criarPainelFooter() {
+        GridLayout footerLayout = new GridLayout(2, 1);
+        footerLayout.setHgap(550);
+
+        painelFooter = new JPanel(footerLayout);        
+        painelFooter.setPreferredSize(new Dimension(0, 100));
+        painelFooter.setBackground(new Color(219, 219, 219));
+
+        lbInfoUsuario1 = new JLabel("");
+        lbInfoUsuario1.setFont(new Font("Verdana", 0, 20));
+        lbInfoUsuario1.setHorizontalAlignment(SwingConstants.LEFT);
+        painelFooter.add(lbInfoUsuario1);
+
+        lbInfoUsuario2 = new JLabel("");
+        lbInfoUsuario2.setFont(new Font("Verdana", 0, 20));
+        lbInfoUsuario2.setHorizontalAlignment(SwingConstants.LEFT);
+        painelFooter.add(lbInfoUsuario2);
+
+        add(painelFooter, BorderLayout.PAGE_END);
     }
 
     private void criarPainelHeader() {
@@ -376,7 +399,7 @@ public class FormPrincipal extends JFrame {
     JMenuBar barraMenuPrincipal;
     JMenu menuJogo;
     JMenuItem menuItemSair, menuItemNovoJogo, menuItemReiniciar;
-    JLabel lbUsuario1, lbUsuario2, lbJogadorAtual;
+    JLabel lbUsuario1, lbUsuario2, lbJogadorAtual, lbInfoUsuario1, lbInfoUsuario2;
     JTextField txtUsuario1, txtUsuario2;
     JButton btDefUsuarios;
 }
