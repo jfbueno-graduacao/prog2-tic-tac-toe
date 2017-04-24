@@ -55,7 +55,6 @@ public class FormPrincipal extends JFrame {
         super();
         initForm();
         initComponents();
-        setTabuleiro();
         novoJogo();
         bloquearTabuleiro();
     }
