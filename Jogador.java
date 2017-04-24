@@ -3,8 +3,8 @@ public class Jogador {
     private int multiplicador;
     private String simbolo;
 
-    public Jogador(Usuario from, int multiplicador, String simbolo){
-        usuario = from;
+    public Jogador(Usuario usuario, int multiplicador, String simbolo){
+        this.usuario = usuario;
         this.multiplicador = multiplicador;
         this.simbolo = simbolo;
     }
