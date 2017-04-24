@@ -27,6 +27,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -228,7 +229,7 @@ public class FormPrincipal extends JFrame {
     /* ---- Criação da interface gráfica ---- */
 
     private void initComponents() {
-        setTitle("Jogo da Velha");
+        setTitle("JTic Tac Toe");
 
         barraMenuPrincipal = new JMenuBar();
         
@@ -390,6 +391,9 @@ public class FormPrincipal extends JFrame {
     }
 
     private void initForm() {
+        ImageIcon img = new ImageIcon("./resources/icon.png");
+        setIconImage(img.getImage());
+
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500, 720));
