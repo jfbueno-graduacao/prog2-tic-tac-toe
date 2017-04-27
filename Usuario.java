@@ -36,8 +36,4 @@ public class Usuario {
     public int getPartidasPerdidas(){
     	return partidasPerdidas;
     }
-
-    public String toString(){        
-        return String.format("%s %s %s", nome, partidasGanhas, partidasPerdidas);
-    }
 }

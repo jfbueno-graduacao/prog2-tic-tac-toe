@@ -233,7 +233,8 @@ public class FormPrincipal extends JFrame {
 
         barraMenuPrincipal = new JMenuBar();
         
-        menuJogo = new JMenu("Jogo");// menu externo
+        menuJogo = new JMenu("Jogo");
+        menuRanking = new JMenu("Ranking");
         
         menuItemReiniciar = new JMenuItem("Reiniciar jogo atual");
         menuItemReiniciar.addActionListener(new ActionListener(){
@@ -260,11 +261,33 @@ public class FormPrincipal extends JFrame {
                 novoJogo();
             }
         });
+
+        JMenuItem menuItemRankingVitorias = new JMenuItem("Por (mais) vitórias");
+        menuItemRankingVitorias.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                FormRanking form = new FormRanking(TipoOrdenacaoRanking.VITORIAS);
+                form.setVisible(true);
+            }
+        });
+
+        JMenuItem menuItemRankingDerrotas = new JMenuItem("Por (menos) derrotas");
+        menuItemRankingDerrotas.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                FormRanking form = new FormRanking(TipoOrdenacaoRanking.DERROTAS);
+                form.setVisible(true);
+            }
+        });
         
         menuJogo.add(menuItemNovoJogo);
         menuJogo.add(menuItemReiniciar);
-        menuJogo.add(menuItemSair);// add os items no menu
+        menuJogo.add(menuItemSair);
+
+        menuRanking.add(menuItemRankingVitorias);
+        menuRanking.add(menuItemRankingDerrotas);
+
         barraMenuPrincipal.add(menuJogo);
+        barraMenuPrincipal.add(menuRanking);
+
         setJMenuBar(barraMenuPrincipal);
 
         BorderLayout borderLayout = new BorderLayout(0, 10);
@@ -403,7 +426,7 @@ public class FormPrincipal extends JFrame {
 
     JPanel painelHeader, painelCentro, painelFooter;
     JMenuBar barraMenuPrincipal;
-    JMenu menuJogo;
+    JMenu menuJogo, menuRanking;
     JMenuItem menuItemSair, menuItemNovoJogo, menuItemReiniciar;
     JLabel lbUsuario1, lbUsuario2, lbJogadorAtual, lbInfoUsuario1, lbInfoUsuario2;
     JTextField txtUsuario1, txtUsuario2;
